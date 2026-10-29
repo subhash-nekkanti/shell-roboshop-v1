@@ -18,7 +18,7 @@ do
                     --output text)
     echo "$instance ID is: $instance_id"
 
-    if [ $instance -ne frontend ]; then
+    if ( $instance != "frontend" ); then
         IP=$(aws ec2 describe-instances \
                 --instance-ids $instance_id \
                 --query 'Reservations[*].Instances[*].[PrivateIpAddress]' \
@@ -36,20 +36,17 @@ do
 
     fi
     aws route53 change-resource-record-sets \
-    --hosted-zone-id $hostedzone_id \
+    --hosted-zone-id "$hostedzone_id" \
     --change-batch "{
-        "Changes": [{
-            "Action": "UPSERT",
-            "ResourceRecordSet": {
-                "Name": "$r53_record",
-                "Type": "A",
-                "TTL": 1,
-                "ResourceRecords": [{"Value": "$IP"}]
+        \"Changes\": [{
+            \"Action\": \"UPSERT\",
+            \"ResourceRecordSet\": {
+                \"Name\": \"$r53_record\",
+                \"Type\": \"A\",
+                \"TTL\": 60,
+                \"ResourceRecords\": [{\"Value\": \"$IP\"}]
             }
         }]
     }"
-
-
-
 
 done
