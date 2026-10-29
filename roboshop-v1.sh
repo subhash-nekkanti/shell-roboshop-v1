@@ -5,7 +5,7 @@ instance_type="t3.micro"
 hostedzone_id="Z09125131M9EG1Q5WH8KL"
 domain_name="devops92s.shop"
 
-for instance $@
+for instance in $@
 do
     echo "creating instance"
     
