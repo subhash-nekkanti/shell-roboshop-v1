@@ -29,7 +29,7 @@ if [ $user_id -ne 0 ]; then
 fi
 
 
-cp repo.mongodb /etc/yom.repos.d/mongo.repo
+cp repo.mongodb /etc/yum.repos.d/mongo.repo
 validation $? "adding mongo repo"
 
 dnf install mongodb-org -y &>>logs_file
