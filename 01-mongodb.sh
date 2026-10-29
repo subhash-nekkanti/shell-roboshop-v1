@@ -15,7 +15,7 @@ N="\e[0m"
 
 
 validation(){
-    if [ $1 -ne 0 ]; then # $? gives the exit status of previous command if it is 0 then only it proceeds to next steps
+    if [ "$1" -ne 0 ]; then # $? gives the exit status of previous command if it is 0 then only it proceeds to next steps
         echo "${2} FAILED" | tee -a $logs_file
     exit 1  #(nginxxxxx) installation failed (exit status is not 0) so it just prints and terminates it wont install my sql
     else 
@@ -29,7 +29,7 @@ if [ $user_id -ne 0 ]; then
 fi
 
 
-cp repo.mongodb /etc/yum.repos.d/mongo.repo
+cp mongo.repo /etc/yum.repos.d/mongo.repo
 validation $? "adding mongo repo"
 
 dnf install mongodb-org -y &>>logs_file
