@@ -23,13 +23,17 @@ do
                 --instance-ids $instance_id \
                 --query 'Reservations[*].Instances[*].[PrivateIpAddress]' \
                 --output text)
+        echo "privateIp is : $IP"
+
     else
         IP=$(aws ec2 describe-instances \
                 --instance-ids $instance_id \
                 --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
                 --output text)
+        echo "public IP is : $IP"
+        
     fi
-    
+
 
 
 done
