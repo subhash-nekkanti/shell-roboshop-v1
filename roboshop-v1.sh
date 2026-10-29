@@ -10,10 +10,10 @@ do
     echo "creating instance"
     
     instance_id=$(aws ec2 run-instances \
-                    --image-id $ami_id
-                    --instance_type $instance_type \
+                    --image-id $ami_id \
+                    --instance-type $instance_type \
                     --security-groups "Roboshop-common" "roboshop-$instance" \
-                    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Roboshop-$instance}]"
+                    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Roboshop-$instance}]" \
                     --query 'Instances[0].InstanceId' \
                     --output text)
     echo "$instance ID is: $instance_id"
