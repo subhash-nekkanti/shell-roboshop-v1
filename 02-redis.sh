@@ -12,9 +12,11 @@ Y="\e[33m"
 N="\e[0m"
 
 
-timestamp(){
+timestamp(){          #timstamp function insted date "+%f %T" command everywhere just call the function when needed
     date "+%F %T"
 }
+
+
 validation(){
     if [ "$1" -ne 0 ]; then # $? gives the exit status of previous command if it is 0 then only it proceeds to next steps
         echo "$(timestamp) [ERROR]  ${2}..FAILED" | tee -a $logs_file
@@ -31,17 +33,18 @@ fi
 
 echo "$(timestamp) [INFO] ==== script started execution ====" | tee -a $logs_file
 
-dnf module disable redis -y &>>logs_file
+dnf module disable redis -y &>>$logs_file
 validation $? "Disabling old Redis version"
 
-dnf module enable redis:7 -y &>>logs_file
+dnf module enable redis:7 -y &>>$logs_file
 validation $? "Enable redis  V7"
 
-dnf install redis -y &>>logs_file
+dnf install redis -y &>>$logs_file
 validation $? "Redis Installation"
 
-sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &>>logs_file
-validation $? "configuration"
+sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &>>$logs_file
+validation $? "configuration"  # 1. strating with bind chnage 127.0.0.1 to 0.0.0.0 and also
+                               #2. substitute protected-mode yes to protected-mode no (peermanantly -i)
 
 systemctl enable redis
 systemctl start redis
