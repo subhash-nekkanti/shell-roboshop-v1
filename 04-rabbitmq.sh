@@ -59,8 +59,8 @@ validation $? "Set Permissions for system user"
 
 
 
-echo "$(timestamp)[INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
-echo "$(timestamp)[INFO] ==== script completed execution ====" | tee -a $logs_file
+echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
+echo "$(timestamp) [INFO] ==== script completed execution ====" | tee -a $logs_file
 
 
 
