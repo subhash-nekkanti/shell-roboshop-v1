@@ -50,7 +50,32 @@ else
     echo -e "$(timestamp) [INFO] System user already exist ${Y}SKIPPING...${N}"
 fi
 
+mkdir -p /app #creating app directory -p tells if /app is already existing leave if not thrn create /app directory
+validation $? "Creating Appp directory"
 
+curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip
+validation $? "downloading the application"
+
+
+cd /app
+unzip /tmp/catalogue.zip
+validation $? "Unzipping Application(catalogue)"
+
+npm install
+validation $? "Installing dependencies"
+
+cp catalogue.service vim /etc/systemd/system/catalogue.service
+
+
+
+systemctl daemon-reload
+validation $? "Reloading application"
+
+systemctl enable catalogue
+validation $? "Enabling application"
+
+systemctl start catalogue
+validation $? "Starting application (catalogue)"
 
 
 
