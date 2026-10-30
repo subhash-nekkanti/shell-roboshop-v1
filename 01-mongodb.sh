@@ -35,8 +35,13 @@ validation $? "adding mongo repo"
 dnf install mongodb-org -y &>>logs_file
 validation $? "MongoDB installation"
 
-systemctl enable mongod
-systemctl start mongod
+systemctl enable mongod &>>logs_file
+systemctl start mongod &>>logs_file
 validation $? "starting and enabling MongoDB"
 
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf   #sed-streamline editor, -i make changes permanantly s--> substitute
+validation $? "updating remote configuation"     #127.0.0.1 to 0.0.0.0 in /etc/mongod.conf
+
+systemctl restart mongod  #restarting mongoDB
+validation $? "Restarting mongoDB"
 
