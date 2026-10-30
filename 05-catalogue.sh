@@ -33,17 +33,19 @@ fi
 
 echo "$(timestamp) [INFO] ==== script started execution ====" | tee -a $logs_file
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$logs_file
 validation $? "Disable Node JS existing Version"
 
-dnf module enable nodejs:24 -y
+dnf module enable nodejs:24 -y &>>$logs_file
 validation $? "Enable Node JS V 24"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$logs_file
 validation $? "Installing Node JS"
                 
-                
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logs_file
+validation $? "Creating system user"
+
 
 
 
