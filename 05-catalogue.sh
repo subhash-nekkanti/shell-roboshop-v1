@@ -42,12 +42,12 @@ validation $? "Enable Node JS V 24"
 dnf install nodejs -y &>>$logs_file
 validation $? "Installing Node JS"
                 
-id roboshop
+id roboshop &>>$logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logs_file
     validation $? "Creating system user"
 else
-    echo "$(timestamp) [INFO] System user already exist ${Y}SKIPPING...${N}"
+    echo -e "$(timestamp) [INFO] System user already exist ${Y}SKIPPING...${N}"
 fi
 
 
