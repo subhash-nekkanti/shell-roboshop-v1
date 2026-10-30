@@ -51,7 +51,8 @@ if [ $? -ne 0 ]; then                                           #so check if use
     rabbitmqctl add_user roboshop roboshop123 &>>$logs_file      #if exit status is 0 then user already exist and skip creating user. If $? =1 then create a user which means user doesnot exist
     validation $? "creating system RabbitMQ user for RoboShop"
 else
-    echo "$(timestamp) [INFO] : User already exist....${Y}SKIPPING...${N}" 
+    echo "$(timestamp) [INFO] : User already exist ${Y}SKIPPING...${N}" 
+fi
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 validation $? "Set Permissions for systemuser" &>>$logs_file
