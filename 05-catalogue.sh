@@ -50,31 +50,31 @@ else
     echo -e "$(timestamp) [INFO] System user already exist ${Y}SKIPPING...${N}"
 fi
 
-mkdir -p /app #creating app directory -p tells if /app is already existing leave if not thrn create /app directory
+mkdir -p /app &>>$logs_file #creating app directory -p tells if /app is already existing leave if not thrn create /app directory
 validation $? "Creating Appp directory"
 
-curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip
+curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip &>>$logs_file
 validation $? "downloading the application"
 
 
 cd /app
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>>$logs_file
 validation $? "Unzipping Application(catalogue)"
 
-npm install
+npm install &>>$logs_file
 validation $? "Installing dependencies"
 
-cp catalogue.service vim /etc/systemd/system/catalogue.service
+cp catalogue.service /etc/systemd/system/catalogue.service
 
 
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$logs_file
 validation $? "Reloading application"
 
-systemctl enable catalogue
+systemctl enable catalogue &>>$logs_file
 validation $? "Enabling application"
 
-systemctl start catalogue
+systemctl start catalogue &>>$logs_file
 validation $? "Starting application (catalogue)"
 
 
