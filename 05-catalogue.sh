@@ -2,7 +2,7 @@
 user_id=$(id -u)
 logs_folder="/var/logs/roboshop"
 logs_file=${logs_folder}/${0}.log
-domain_name=devops92s.shop
+domain_name="devops92s.shop"
 mkdir -p $logs_folder
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
@@ -64,6 +64,7 @@ validation $? "Unzipping Application(catalogue)"
 npm install &>>$logs_file
 validation $? "Installing dependencies"
 
+sed -i "/s/DOMAIN_NAME/$domain_name" catalogue.service
 cp catalogue.service /etc/systemd/system/catalogue.service
 
 
