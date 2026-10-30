@@ -46,7 +46,7 @@ validation $? "Start and Enable RabbtiMQ server"
 #Idempotency: A script or program should give same result irrespective of no of times we run or retries the script
 
 
-rabbitmq ctl list_users | grep -qw "roboshop"                    #if systemuser already exists and if we run this script multiple times it throws error for adding user
+rabbitmqctl list_users | grep -qw "roboshop"                    #if systemuser already exists and if we run this script multiple times it throws error for adding user
 if [ $? -ne 0]; then                                             #so check if user already exist or nor with command "rabbitmq ctl list_users | grep -qw "roboshop" and check exit status 
     rabbitmqctl add_user roboshop roboshop123 &>>$logs_file      #if exit status is 0 then user already exist and skip creating user. If $? =1 then create a user which means user doesnot exist
     validation $? "creating system RabbitMQ user for RoboShop"
@@ -55,7 +55,6 @@ else
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 validation $? "Set Permissions for systemuser" &>>$logs_file
-
 
 
 
