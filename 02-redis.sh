@@ -40,14 +40,14 @@ validation $? "Enable redis  V7"
 dnf install redis -y &>>logs_file
 validation $? "Redis Installation"
 
-sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf
+sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &>>logs_file
 validation $? "configuration"
 
 systemctl enable redis
 systemctl start redis
 validation $? "Enable and start redis"
 
-echo "$(timestamp [INFO] ==== script completed execution ====)"
+echo "$(timestamp [INFO] ==== script completed execution ====)" | tee -a $logs_file
 
 
 
