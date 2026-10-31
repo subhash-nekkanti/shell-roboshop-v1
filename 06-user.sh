@@ -36,40 +36,39 @@ fi
 echo "$(timestamp) [INFO] ==== script started execution ====" | tee -a $logs_file
 
 
-dnf module disable nodejs -y
-dnf module enable nodejs:24 -y
+dnf module disable nodejs -y &>>logs_file
+dnf module enable nodejs:24 -y &>>logs_file
 validation $? "Disbaling existing node js and Enabling v24"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>logs_file
 validation $? "INSTALLING NODEJS:24"
 id roboshop
 if [ $? -ne 0 ]; then
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>logs_file
     validation $? "CREATING SYSTEM USER"
 else
     echo -e "$(timestamp) [INFO] SYSTEM USER already EXIST so ${Y}SKIPPING${N}"
 fi
 
 mkdir /app
-curl -L -o /tmp/user.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip
+curl -L -o /tmp/user.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip &>>logs_file
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" user.service
-
+sed -i "s/DOMAIN_NAME/$domain_name/g" user.service &>>logs_file
 validation $? "DOWNLOADING USER"
 
 cd /app
-unzip -o /tmp/user.zip
+unzip -o /tmp/user.zip &>>logs_file
 validation $? "UNZIPPING user"
 
 cd /app
-npm install
+npm install &>>logs_file
 validation $? "INSTALLING DEPENDENCIES"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>logs_file
 validation $? "RELOAD USER"
 
-systemctl enable user
-systemctl start user
+systemctl enable user &>>logs_file
+systemctl start user &>>logs_file
 validation $? "ENABLE and START USER"
 
 
