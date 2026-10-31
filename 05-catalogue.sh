@@ -85,15 +85,14 @@ validation $? "Loading Master Data(MongoDB)"
 dnf install mongodb-mongosh -y &>>$logs_file
 validation $? "Installing MongoDB Client"
 
-mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'
-echo $?
-
-#if [ $? -ne 0 ]; then
-    #mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()' &>>$logs_file
-   # validation $? "Loading data"
-#else
-    #echo -e "Data has been already loaded so ${y}SKIPPING...${n}"
-#fi
+test=$"mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'"
+if [ $test -ne 0 ]; then
+    echo -e "Data has been already loaded so ${y}SKIPPING...${n}"
+    
+else
+    mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()' &>>$logs_file
+    validation $? "Loading data"
+fi
 
 echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
 echo "$(timestamp) [INFO] ==== script completed execution ====" | tee -a $logs_file
