@@ -89,10 +89,10 @@ product_count=$(mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblin
 validation $? "checking if already loaded"
 
 if [ "$product_count" -eq 0 ]; then
-    mongosh --host mongodb.$domain_name </app/db/master-data.js &>>$logs_file
+    mongosh --host "mongodb.$domain_name" </app/db/master-data.js &>>$logs_file
     validation $? "Loading products"
 else
-    echo -e "Data has been already loaded so ${Y}SKIPPING...${N}"
+    echo -e "$(timestamp) [INFO] Data has been already loaded so ${Y}SKIPPING...${N}"
 fi
 
 echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
