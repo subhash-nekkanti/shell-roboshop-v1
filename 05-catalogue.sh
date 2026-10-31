@@ -2,9 +2,9 @@
 user_id=$(id -u)
 logs_folder="/var/logs/roboshop"
 logs_file=${logs_folder}/${0}.log
-domain_name="devops92s.shop"
 mkdir -p $logs_folder
-scripts_dir=$(dirname "$(realpath "$0")")
+domain_name="devops92s.shop"
+
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
 R="\e[31m"
@@ -57,18 +57,16 @@ validation $? "Creating Appp directory"
 curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip &>>$logs_file
 validation $? "downloading the application"
 
-
 cd /app
 unzip /tmp/catalogue.zip &>>$logs_file
-validation $? "Unzipping Application"
+validation $? "Unzipping application"
 
+cd /app
 npm install &>>$logs_file
-validation $? "Installing dependencies"
+validation $? "Installing Dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" $scripts_dir/catalogue.service &>>$logs_file
-cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalogue.service
-
-
+sed -i "s/DOMAIN_NAME/$domain_name" catalogue.service &>>$logs_file
+cp catalogue.service /etc/systemd/system.d/catalogue.service
 
 systemctl daemon-reload &>>$logs_file
 validation $? "Reloading application"
