@@ -43,7 +43,7 @@ validation $? "Disbaling existing node js and Enabling v24"
 
 dnf install nodejs -y &>>$logs_file
 validation $? "INSTALLING NODEJS:24"
-id roboshop
+id roboshop &>>$logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logs_file
     validation $? "CREATING SYSTEM USER"
@@ -70,8 +70,8 @@ cp $scriptdir/cart.service /etc/systemd/system/cart.service &>>$logs_file
 systemctl daemon-reload &>>$logs_file
 validation $? "RELOAD CART"
 
-systemctl enable user &>>$logs_file
-systemctl start user &>>$logs_file
+systemctl enable cart &>>$logs_file
+systemctl start cart &>>$logs_file
 validation $? "ENABLE and START CART"
 
 
