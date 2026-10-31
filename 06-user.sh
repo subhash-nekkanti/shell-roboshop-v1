@@ -65,7 +65,7 @@ cd /app
 npm install &>>logs_file
 validation $? "INSTALLING DEPENDENCIES"
 
-cp $script_dir/user.service /etc/systemd/system/user.service &>>$logs_file
+cp $scriptdir/user.service /etc/systemd/system/user.service &>>$logs_file
 
 systemctl daemon-reload &>>$logs_file
 validation $? "RELOAD USER"
