@@ -79,6 +79,19 @@ systemctl start catalogue &>>$logs_file
 validation $? "Starting application (catalogue)"
 
 
+cp $scripts_dir/mongo.repo /etc/yum.repos.d/mongo.repo
+validation $? "Loading Master Data(MongoDB)"
+
+dnf install mongodb-mongosh -y
+validation $? "Installing MongoDB Client"
+
+mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'
+if [ $? -ne 0 ]; then
+    mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'
+    validation $? "Loading data"
+else
+    echo -e "Data has been already loaded so ${y}SLIPPING...${n}"
+fi
 
 echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
 echo "$(timestamp) [INFO] ==== script completed execution ====" | tee -a $logs_file
