@@ -4,6 +4,7 @@ logs_folder="/var/logs/roboshop"
 logs_file=${logs_folder}/${0}.log
 mkdir -p $logs_folder
 domain_name="devops92s.shop"
+scripts_dir=$(dirname "$(realpath "$0"))"
 
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
@@ -65,8 +66,8 @@ cd /app
 npm install &>>$logs_file
 validation $? "Installing Dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" catalogue.service &>>$logs_file
-cp catalogue.service /etc/systemd/system/catalogue.service
+sed -i "s/DOMAIN_NAME/$domain_name/g" $scripts_dir/catalogue.service &>>$logs_file
+cp $scripts_dir/catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>>$logs_file
 validation $? "Reloading application"
