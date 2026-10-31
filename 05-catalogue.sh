@@ -65,8 +65,8 @@ cd /app
 npm install &>>$logs_file
 validation $? "Installing Dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name" catalogue.service &>>$logs_file
-cp catalogue.service /etc/systemd/system.d/catalogue.service
+sed -i "s/DOMAIN_NAME/$domain_name/g" catalogue.service &>>$logs_file
+cp catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>>$logs_file
 validation $? "Reloading application"
