@@ -5,6 +5,7 @@ logs_file=${logs_folder}/${0}.log
 
 domain_name="devops92s.shop"
 
+scriptdir=$dirname("$(realpath "$0")")
 mkdir -p $logs_folder
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
@@ -64,7 +65,7 @@ cd /app
 npm install &>>logs_file
 validation $? "INSTALLING DEPENDENCIES"
 
-cp user.service /etc/systemd/system/user.service &>>$logs_file
+cp $script_dir/user.service /etc/systemd/system/user.service &>>$logs_file
 
 systemctl daemon-reload &>>$logs_file
 validation $? "RELOAD USER"
