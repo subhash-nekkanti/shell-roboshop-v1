@@ -86,9 +86,10 @@ dnf install mongodb-mongosh -y &>>$logs_file
 validation $? "Installing MongoDB Client"
 
 test=$"mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'"
-if [ $test -ne 0 ]; then
-    echo -e "Data has been already loaded so ${y}SKIPPING...${n}"
-    
+validation $? "checking if already loaded"
+
+if [ ${test} -ne 0 ]; then
+    echo -e "Data has been already loaded so ${y}SKIPPING...${n}" 
 else
     mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()' &>>$logs_file
     validation $? "Loading data"
