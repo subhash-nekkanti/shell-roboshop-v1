@@ -58,7 +58,7 @@ sed -i "s/DOMAIN_NAME/$domain_name/g" cart.service &>>$logs_file
 validation $? "DOWNLOADING CART"
 
 cd /app
-unzip /tmp/cart.zip &>>logs_file
+unzip -o /tmp/cart.zip &>>logs_file
 validation $? "UNZIPPING CART"
 
 cd /app
