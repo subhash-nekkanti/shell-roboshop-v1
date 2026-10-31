@@ -50,7 +50,7 @@ else
     echo -e "$(timestamp) [INFO] SYSTEM USER already EXIST so ${Y}SKIPPING${N}"
 fi
 
-mkdir /app
+mkdir /app &>>$logs_file
 curl -L -o /tmp/user.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip &>>$logs_file
 
 sed -i "s/DOMAIN_NAME/$domain_name/g" user.service &>>$logs_file
