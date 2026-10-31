@@ -4,7 +4,7 @@ logs_folder="/var/logs/roboshop"
 logs_file=${logs_folder}/${0}.log
 mkdir -p $logs_folder
 domain_name="devops92s.shop"
-scripts_dir=$(dirname "$(realpath "$0"))"
+scripts_dir=$(dirname "$(realpath "$0")")
 
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
