@@ -3,9 +3,9 @@ user_id=$(id -u)
 logs_folder="/var/logs/roboshop"
 logs_file=${logs_folder}/${0}.log
 mkdir -p $logs_folder
-domain_name="devops92s.shop"
-scripts_dir=$(dirname "$(realpath "$0")")
-
+domain_name="devops92s.shop" #we gave DOMAIN_NAME in catalogue.service file so we refer here and change it in sed 
+scripts_dir=$(dirname "$(realpath "$0")") #  Your script changed its working directory:  cd /app  Now when we execute: sed -i "s/DOMAIN_NAME/$domain_name/g" catalogue.service it searches for catalogue.serviece in /app directory which doesnot exist
+#so $0 gives script name and realpath($0) gives real path of script and dir(realpath($0)) gives directory in  which it refers.
 
 # echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
 R="\e[31m"
@@ -59,14 +59,15 @@ curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/robosho
 validation $? "downloading the application"
 
 cd /app
-unzip -o /tmp/catalogue.zip &>>$logs_file
+unzip -o /tmp/catalogue.zip &>>$logs_file   #-o overwrites everytime when we execute if we do not mention -o then it throws error. Its always better to either removing entire directory or overwriting everytime we run a script 
 validation $? "Unzipping application"
 
 cd /app
 npm install &>>$logs_file
 validation $? "Installing Dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" $scripts_dir/catalogue.service &>>$logs_file
+sed -i "s/DOMAIN_NAME/$domain_name/g" $scripts_dir/catalogue.service &>>$logs_file   #change -i permanantly DOMAIN_NAME to domain_name g-->globally
+#so now we are in /app but we refered $script_dir in which we already declared its path so it goes to that directory and check for catalogue.service
 cp $scripts_dir/catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>>$logs_file
@@ -94,6 +95,9 @@ if [ "$product_count" -eq 0 ]; then
 else
     echo -e "$(timestamp) [INFO] Data has been already loaded so ${Y}SKIPPING...${N}"
 fi
+systemctl restart catalogue
+validation $? "RESTARTING CATALOGUE"
+
 
 echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
 echo "$(timestamp) [INFO] ==== script completed execution ====" | tee -a $logs_file
