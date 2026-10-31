@@ -59,14 +59,14 @@ validation $? "downloading the application"
 
 
 cd /app
-unzip -o /tmp/catalogue.zip -d /app &>>$logs_file
-validation $? "Unzipping Application(catalogue)"
+unzip /tmp/catalogue.zip /app &>>$logs_file
+validation $? "Unzipping Application"
 
 npm install &>>$logs_file
 validation $? "Installing dependencies"
 
 sed -i "s/DOMAIN_NAME/$domain_name" $scripts_dir/catalogue.service &>>$logs_file
-cp $scripts_dir/catalogue.service /etc/systemd/system/catalogue.service
+cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalogue.service
 
 
 
