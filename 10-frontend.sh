@@ -1,74 +1,63 @@
 #!/bin/bash
+
 user_id=$(id -u)
-logs_folder="/var/logs/roboshop"
-logs_file=${logs_folder}/${0}.log
-
-domain_name="devops92s.shop"
-
+logs_folder="/var/log/roboshop"
+logs_file="${logs_folder}/${0}.log"
+domain_name="daws92s.store"
 scripts_dir=$(dirname "$(realpath "$0")")
-mkdir -p $logs_folder
-
-# echo -e "\e[31mThis is Red Text\e[0m"    is the syntax for colours numbers denote colours and -e tells that it is enabling something 
 R="\e[31m"
-G="\e[32m" #instead of repeating this command every where we are storing it in a variables 
+G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-
-timestamp(){          #timstamp function insted date "+%f %T" command everywhere just call the function when needed
-    date "+%F %T"
-}
-
-
-validation(){
-    if [ "$1" -ne 0 ]; then # $? gives the exit status of previous command if it is 0 then only it proceeds to next steps
-        echo "$(timestamp) [ERROR]  ${2}..FAILED" | tee -a $logs_file
-    exit 1  #(nginxxxxx) installation failed (exit status is not 0) so it just prints and terminates it wont install my sql
-    else 
-        echo "$(timestamp) [INFO]  ${2}..SUCCESS" | tee -a $logs_file
-    fi
-}
-
 if [ $user_id -ne 0 ]; then
-    echo "please run this script with sudo access"
+    echo "Please run this script with sudo access.."
     exit 1
 fi
 
-echo "$(timestamp) [INFO] ==== script started execution ====" | tee -a $logs_file
+mkdir -p $logs_folder
 
-dnf module disable nginx -y &>> $logs_file
-dnf module enable nginx:1.26 -y &>> $logs_file
-dnf install nginx -y &>> $logs_file
-validation $? "INSTALLING NGINX"
+timestamp(){
+    date "+%F %T" 
+}
 
-systemctl enable nginx &>> $logs_file
-systemctl start nginx &>> $logs_file
-validation $? "ENABLE AND START NGINX"
+validate(){
+    if [ $1 -ne 0 ]; then
+        echo -e "$(timestamp) [ERROR] ${2}..${R}FAILED${N}" | tee -a $logs_file
+        exit 1
+    else
+        echo -e "$(timestamp) [INFO] ${2}..${G}SUCCESS${N}" | tee -a $logs_file
+    fi
+}
 
-rm -rf /usr/share/nginx/html/* &>> $logs_file
-validation $? "remove old content"
+echo "$(timestamp) [INFO] ==== Script started Execution =====" | tee -a $logs_file
+ 
+dnf module disable nginx -y &>>$logs_file
+dnf module enable nginx:1.26 -y &>>$logs_file
+dnf install nginx -y &>>$logs_file
+validate $? "Installing nginx"
 
-curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>> $logs_file
-validation $? "INSTALLING FRONTEND PACKAGE"
+systemctl enable nginx &>>$logs_file
+systemctl start nginx &>>$logs_file
+validate $? "Enable and start nginx"
 
+rm -rf /usr/share/nginx/html/* &>>$logs_file
+validate $? "Removing default nginx content"
+
+curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>>$logs_file
 cd /usr/share/nginx/html &>> $logs_file
 unzip /tmp/frontend.zip &>> $logs_file
-validation $? "UNZIPPING FRONTEND"
+validate $? "Downloading and unzipping frontend code"
 
-sudo sed -i 's/catlogue/catalogue/g' /etc/nginx/default.d/roboshop.conf 
-sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf" &>> $logs_file
-cp "$scripts_dir/roboshop.conf" /etc/nginx/default.d/roboshop.conf &>> $logs_file
-validation $? "copied roboshop config"
-
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf"
+cp "$scripts_dir/roboshop.conf" /etc/nginx/default.d/roboshop.conf
+validate $? "Copied roboshop config"
 
 nginx -t &>> $logs_file
-validation $? "nginx configuration"
+validate $? "Nginx Configuration"
 
-systemctl restart nginx &>> $logs_file
-validation $? "START nginx"
+systemctl restart nginx
+validate $? "Restarting nginx"
 
-echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
-echo "$(timestamp) [INFO] ==== script completed execution ====" | tee -a $logs_file
-
-
-
+echo "$(timestamp) [INFO] Script completed in $SECONDS seconds"
+echo "$(timestamp) [INFO] ==== Script completed Execution =====" | tee -a $logs_file
