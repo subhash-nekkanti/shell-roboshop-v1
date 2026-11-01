@@ -1,9 +1,9 @@
 #!/bin/bash
 
 user_id=$(id -u)
-logs_folder="/var/log/roboshop"
+logs_folder="/var/logs/roboshop"
 logs_file="${logs_folder}/${0}.log"
-domain_name="daws92s.store"
+domain_name="devops92.shop"
 scripts_dir=$(dirname "$(realpath "$0")")
 R="\e[31m"
 G="\e[32m"
@@ -51,9 +51,6 @@ if [ $? -ne 0 ]; then
 else
     echo -e "$(timestamp) [INFO] System user roboshop already exist...${Y}SKIPPING${N}"
 fi
-
-rm -rf /app
-validate $? "Removing old code"
 
 mkdir -p /app
 validate $? "Creating app directory"
