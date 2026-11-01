@@ -62,7 +62,7 @@ curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop
 validate $? "Downloading shipping"
 
 cd /app
-unzip /tmp/shipping.zip &>> $logs_file
+unzip -o /tmp/shipping.zip &>> $logs_file
 validate $? "Unzipping shipping"
 
 mvn clean package &>> $logs_file
