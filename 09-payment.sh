@@ -44,7 +44,7 @@ validation $? "installing python 3.14"
 id roboshop &>> $logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $logs_file
-    validate $? "Creating system user"
+    validation $? "Creating system user"
 else
     echo -e "$(timestamp) [INFO] System user roboshop already exist...${Y}SKIPPING${N}"
 fi
