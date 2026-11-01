@@ -57,6 +57,8 @@ validation $? "UNZIPPING FRONTEND"
 
 sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf" &>> $logs_file
 cp "$scripts_dir/roboshop.conf" /etc/systemd/system/roboshop.conf &>> $logs_file
+validation $? "copied roboshop config"
+
 
 
 systemctl restart nginx &>> $logs_file
