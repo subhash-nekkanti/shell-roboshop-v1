@@ -36,30 +36,30 @@ fi
 
 echo "$(timestamp) [INFO] ==== script started execution ====" | tee -a $logs_file
 
-dnf module disable nginx -y
-dnf module enable nginx:1.26 -y
-dnf install nginx -y
+dnf module disable nginx -y &>> $logs_file
+dnf module enable nginx:1.26 -y &>> $logs_file
+dnf install nginx -y &>> $logs_file
 validation $? "INSTALLING NGINX"
 
-systemctl enable nginx
-systemctl start nginx
+systemctl enable nginx &>> $logs_file
+systemctl start nginx &>> $logs_file
 validation $? "ENABLE AND START NGINX"
 
-rm -rf /usr/share/nginx/html/*
+rm -rf /usr/share/nginx/html/* &>> $logs_file
 validation $? "remove old content"
 
-curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip
+curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>> $logs_file
 validation $? "INSTALLING FRONTEND PACKAGE"
 
-cd /usr/share/nginx/html
-unzip /tmp/frontend.zip
+cd /usr/share/nginx/html &>> $logs_file
+unzip /tmp/frontend.zip &>> $logs_file
 validation $? "UNZIPPING FRONTEND"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf"
-cp "$scripts_dir/roboshop.conf" /etc/systemd/system/roboshop.conf
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf" &>> $logs_file
+cp "$scripts_dir/roboshop.conf" /etc/systemd/system/roboshop.conf &>> $logs_file
 
 
-systemctl restart nginx
+systemctl restart nginx &>> $logs_file
 validation $? "START nginx"
 
 echo "$(timestamp) [INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
