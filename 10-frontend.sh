@@ -55,6 +55,7 @@ cd /usr/share/nginx/html &>> $logs_file
 unzip /tmp/frontend.zip &>> $logs_file
 validation $? "UNZIPPING FRONTEND"
 
+sudo sed -i 's/catlogue/catalogue/g' /etc/nginx/default.d/roboshop.conf 
 sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf" &>> $logs_file
 cp "$scripts_dir/roboshop.conf" /etc/nginx/default.d/roboshop.conf &>> $logs_file
 validation $? "copied roboshop config"
