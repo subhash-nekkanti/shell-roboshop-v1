@@ -41,6 +41,11 @@ validation $? "Enable MySQLl 8.4 and install MySQL server "
 mysql_secure_installation --set-root-pass RoboShop@1 &>>$logs_file
 validation $? "Setup Root-Pass"
 
+systemctl enable mysqld
+systemctl start mysqld
+validation $? "ENABLE and START MYSQL"
+
+
 
 echo "$(timestamp)[INFO] ==== Script compelted in $SECONDS seconds ====" | tee -a $logs_file
 echo "$(timestamp)[INFO] ==== script completed execution ====" | tee -a $logs_file
