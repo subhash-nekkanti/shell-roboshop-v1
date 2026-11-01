@@ -54,11 +54,14 @@ curl -L -o /tmp/payment.zip https://raw.githubusercontent.com/daws-92s/roboshop-
 validation $? "INSTALLING PAYMENT"
 
 mkdir /app &>> $logs_file
+cd /app
 unzip -o /tmp/payment.zip &>> $logs_file
 validation $? "UNZIPPING PAYMENT"
 
 cd /app
 python3.14 -m venv /app/.venv &>> $logs_file
+validation $? "CREATING VIRTUAL ENVIRONMENT"
+
 /app/.venv/bin/pip install -r requirements.txt &>> $logs_file
 validation $? "INSTALLING DEPENDENCIES"
 
