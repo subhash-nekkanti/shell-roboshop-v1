@@ -3,7 +3,7 @@
 user_id=$(id -u)
 logs_folder="/var/logs/roboshop"
 logs_file="${logs_folder}/${0}.log"
-domain_name="devops92.shop"
+domain_name="devops92s.shop"
 scripts_dir=$(dirname "$(realpath "$0")")
 R="\e[31m"
 G="\e[32m"
